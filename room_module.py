@@ -34,6 +34,5 @@ def room_loop(pictures_list):
                     if current_picture_index < len(pictures_list)-1:
                         current_picture_index += 1
 
-
         c.clock.tick(c.FPS)
         pygame.display.update()

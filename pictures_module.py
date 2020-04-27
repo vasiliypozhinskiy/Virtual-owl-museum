@@ -12,34 +12,42 @@ class Picture:
         self.image = pygame.image.load(self.path)
         self.rect = self.image.get_rect()
         self.deafultfontsize = 30
-        self.fontsize = self.deafultfontsize
-        self.font = pygame.font.Font('freesansbold.ttf', self.fontsize)
+        self.font_size = self.deafultfontsize
+        self.font = pygame.font.Font('freesansbold.ttf', self.font_size)
         self.text_color = self.color = (100, 100, 100)
-        if self.rect.right > c.screen_width * 0.75 - 20:
-            image_resize.scale_image(self.path, self.path[:-4] + " scaled.jpg", c.screen_width * 0.75 - 20)
+        if self.rect.height + self.font_size * 4 > c.screen_height:
+            image_resize.scale_image(self.path, self.path[:-4] + " scaled.jpg", None,
+                                     c.screen_height - self.font_size * 4)
             self.image = pygame.image.load(self.path[:-4] + " scaled.jpg")
             self.rect = self.image.get_rect()
             os.remove(self.path[:-4] + " scaled.jpg")
-        self.rect.center = (c.screen_width * 0.75 // 2, c.screen_height // 2)
-        if self.rect.bottom + self.fontsize * 4 > c.screen_height:
-            image_resize.scale_image(self.path, self.path[:-4] + " scaled.jpg", None, c.screen_height - self.fontsize * 4)
+        if self.rect.width > c.screen_width * 0.75 - 20:
+            image_resize.scale_image(self.path, self.path[:-4] + " scaled.jpg", c.screen_width * 0.75 - 20)
             self.image = pygame.image.load(self.path[:-4] + " scaled.jpg")
             self.rect = self.image.get_rect()
             os.remove(self.path[:-4] + " scaled.jpg")
         self.rect.center = (c.screen_width * 0.75 // 2, c.screen_height // 2)
 
         self.resize_name()
-        self.name_text = self.font.render(self.name[3:-4], True, self.text_color)
+        self.name_text = self.font.render(self.name[4:-4], True, self.text_color)
         self.name_text_rect = self.name_text.get_rect()
-        self.name_text_rect.center = (self.rect.centerx, self.rect.bottom + self.fontsize)
-
-        self.discription_file = open(self.path[:-4] + ".txt", "r")
-        self.discription = self.discription_file.read()
+        self.name_text_rect.center = (self.rect.centerx, self.rect.bottom + self.font_size)
         try:
-            self.fontsize = self.deafultfontsize
-            self.font = pygame.font.Font('freesansbold.ttf', self.fontsize)
+            self.description_file = open(self.path[:-4] + ".txt")
+            self.description = self.description_file.read()
+            self.description_file.close()
+        except FileNotFoundError:
+            self.description_file = open(self.path[:-4] + ".txt", "w")
+            self.description_file.close()
+            self.description_file = open(self.path[:-4] + ".txt", "r")
+            self.description = self.description_file.read()
+            self.description_file.close()
+        try:
+            self.font_size = self.deafultfontsize
+            self.font = pygame.font.Font('freesansbold.ttf', self.font_size)
             self.strings = self.split_discription_to_strings()
-        except:
+        # description file is empty
+        except IndexError:
             self.strings = []
         self.text = []
         for string in self.strings:
@@ -47,11 +55,11 @@ class Picture:
 
     def resize_name(self):
         while self.font.size(self.name)[0] > c.screen_width * 0.75:
-            self.fontsize -= 1
-            self.font = pygame.font.Font('freesansbold.ttf', self.fontsize)
+            self.font_size -= 1
+            self.font = pygame.font.Font('freesansbold.ttf', self.font_size)
 
     def split_discription_to_strings(self):
-        words = self.discription.split()
+        words = self.description.split()
         strings = [words[0]]
         del words[0]
         index = 0
@@ -64,9 +72,9 @@ class Picture:
                 del words[0]
                 index += 1
 
-        if len(strings) * self.fontsize > c.screen_height:
-            self.fontsize -= 1
-            self.font = pygame.font.Font('freesansbold.ttf', self.fontsize)
+        if len(strings) * self.font_size > c.screen_height:
+            self.font_size -= 1
+            self.font = pygame.font.Font('freesansbold.ttf', self.font_size)
             strings = self.split_discription_to_strings()
 
         return strings
@@ -76,6 +84,5 @@ class Picture:
         surface.blit(self.name_text, self.name_text_rect)
         surface.blit(c.text_alfa, (c.screen_width * 0.75, 0, c.screen_width * 0.25, c.screen_height))
         for number, string in enumerate(self.text):
-            surface.blit(string, (c.screen_width * 0.75, number * self.fontsize, c.screen_width * 0.25, c.screen_height))
-
-
+            surface.blit(string, (c.screen_width * 0.75, number * self.font_size,
+                                  c.screen_width * 0.25, c.screen_height))
