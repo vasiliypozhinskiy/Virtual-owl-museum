@@ -24,6 +24,7 @@ def room_loop(pictures_list):
         for i in pygame.event.get():
             if i.type == pygame.KEYDOWN:
                 if i.key == pygame.K_ESCAPE:
+                    pygame.mouse.set_visible(True)
                     pressed = False
             if i.type == pygame.KEYDOWN:
                 if i.key == pygame.K_LEFT:

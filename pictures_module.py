@@ -11,10 +11,10 @@ class Picture:
         self.path = "exposition" + "\\" + era + "\\" + name
         self.image = pygame.image.load(self.path)
         self.rect = self.image.get_rect()
-        self.deafultfontsize = 30
-        self.font_size = self.deafultfontsize
+        self.default_font_size = 30
+        self.font_size = self.default_font_size
         self.font = pygame.font.Font('freesansbold.ttf', self.font_size)
-        self.text_color = self.color = (100, 100, 100)
+        self.text_color = self.color = (130, 130, 130)
         if self.rect.height + self.font_size * 4 > c.screen_height:
             image_resize.scale_image(self.path, self.path[:-4] + " scaled.jpg", None,
                                      c.screen_height - self.font_size * 4)
@@ -43,9 +43,9 @@ class Picture:
             self.description = self.description_file.read()
             self.description_file.close()
         try:
-            self.font_size = self.deafultfontsize
+            self.font_size = self.default_font_size
             self.font = pygame.font.Font('freesansbold.ttf', self.font_size)
-            self.strings = self.split_discription_to_strings()
+            self.strings = self.split_description_to_strings()
         # description file is empty
         except IndexError:
             self.strings = []
@@ -58,31 +58,41 @@ class Picture:
             self.font_size -= 1
             self.font = pygame.font.Font('freesansbold.ttf', self.font_size)
 
-    def split_discription_to_strings(self):
+    def split_description_to_strings(self):
         words = self.description.split()
         strings = [words[0]]
         del words[0]
         index = 0
         while words:
-            if self.font.size(strings[index] + " " + words[0])[0] < c.screen_width * 0.25:
+            if self.font.size(strings[index] + " " + words[0])[0] < c.screen_width * 0.25 \
+                    and words[0] != "NL":
                 strings[index] = strings[index] + " " + words[0]
                 del words[0]
+            elif words[0] == "NL":
+                if words[1] == "NL":
+                    strings.append(" ")
+                    strings.append(words[2])
+                    del words[:3]
+                    index += 2
+                else:
+                    strings.append(words[1])
+                    del words[:2]
+                    index += 1
             else:
                 strings.append(words[0])
                 del words[0]
                 index += 1
-
         if len(strings) * self.font_size > c.screen_height:
             self.font_size -= 1
             self.font = pygame.font.Font('freesansbold.ttf', self.font_size)
-            strings = self.split_discription_to_strings()
+            strings = self.split_description_to_strings()
 
         return strings
 
     def draw(self, surface):
         surface.blit(self.image, self.rect)
         surface.blit(self.name_text, self.name_text_rect)
-        surface.blit(c.text_alfa, (c.screen_width * 0.75, 0, c.screen_width * 0.25, c.screen_height))
+        surface.blit(c.text_alpha, (c.screen_width * 0.75, 0, c.screen_width * 0.25, c.screen_height))
         for number, string in enumerate(self.text):
             surface.blit(string, (c.screen_width * 0.75, number * self.font_size,
                                   c.screen_width * 0.25, c.screen_height))
