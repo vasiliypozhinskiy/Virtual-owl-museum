@@ -4,46 +4,51 @@ import image_resize
 import mainbuttons
 import config as c
 
-background = pygame.image.load("covers\\Old_supreme_court_singapore_hall.jpg")
+background_path = "covers\\background.jpg"
+background = pygame.image.load(background_path)
 background_rect = background.get_rect()
+normal_background_width = background_rect.width
 
 if background_rect.width > c.screen_width:
-    image_resize.scale_image("covers\\Old_supreme_court_singapore_hall.jpg",
-                             "covers\\Old_supreme_court_singapore_hall_scaled.jpg", c.screen_width)
-    background = pygame.image.load("covers\\Old_supreme_court_singapore_hall_scaled.jpg")
+    image_resize.scale_image(background_path,
+                             background_path[:-4] + "_scaled.jpg", c.screen_width)
+    background = pygame.image.load(background_path[:-4] + "_scaled.jpg")
     background_rect = background.get_rect()
-    os.remove("covers\\Old_supreme_court_singapore_hall_scaled.jpg")
+    os.remove(background_path[:-4] + "_scaled.jpg")
 if background_rect.height > c.screen_height:
-    image_resize.scale_image("covers\\Old_supreme_court_singapore_hall.jpg",
-                             "covers\\Old_supreme_court_singapore_hall_scaled.jpg", None, c.screen_height)
-    background = pygame.image.load("covers\\Old_supreme_court_singapore_hall_scaled.jpg")
+    image_resize.scale_image(background_path,
+                             background_path[:-4] + "_scaled.jpg", None, c.screen_height)
+    background = pygame.image.load(background_path[:-4] + "_scaled.jpg")
     background_rect = background.get_rect()
-    os.remove("covers\\Old_supreme_court_singapore_hall_scaled.jpg")
+    os.remove(background_path[:-4] + "_scaled.jpg")
+
+scaled_background_width = background_rect.width
+scale_factor = scaled_background_width / normal_background_width
 
 background_rect.centerx = c.screen_width // 2
 background_rect.centery = c.screen_height // 2
 run = True
 
 buttons = []
-exitbutton = mainbuttons.ExitButton((background_rect.right - 175,
-                                     background_rect.bottom - 100, 150, 75))
-antiquitybutton = mainbuttons.AntiquityButton((background_rect.left + 25,
-                                               background_rect.top + 25, 310, 209))
-middleagesbutton = mainbuttons.MiddleAgesButton((background_rect.left + 25,
-                                                 antiquitybutton.rect.bottom + 50, 210, 209))
-RenaissanceButton = mainbuttons.RenaissanceButton((background_rect.left + 25,
-                                                   middleagesbutton.rect.bottom + 50, 203, 275))
-RealismButton = mainbuttons.RealismButton((antiquitybutton.rect.right + 25,
-                                           background_rect.top + 25, 210, 266))
-ModernismButton = mainbuttons.ModernismButton((RealismButton.rect.right + 25,
-                                               background_rect.top + 25, 205, 212))
-ContemporaryArtButton = mainbuttons.ContemporaryArtButton((ModernismButton.rect.right + 25,
-                                                           background_rect.top + 25, 310, 179))
-OrientalArtButton = mainbuttons.OrientalArtButton((ContemporaryArtButton.rect.right + 25,
-                                                   background_rect.top + 25, 310, 215))
+exitbutton = mainbuttons.ExitButton(scale_factor, background_rect.right - 175,
+                                    background_rect.bottom - 100)
+Antiquitybutton = mainbuttons.AntiquityButton(scale_factor, background_rect.left + 25,
+                                              background_rect.top + 25)
+Middleagesbutton = mainbuttons.MiddleAgesButton(scale_factor, background_rect.left + 25,
+                                                Antiquitybutton.rect.bottom + 50)
+RenaissanceButton = mainbuttons.RenaissanceButton(scale_factor, background_rect.left + 25,
+                                                  Middleagesbutton.rect.bottom + 50)
+RealismButton = mainbuttons.RealismButton(scale_factor, Antiquitybutton.rect.right + 25,
+                                          background_rect.top + 25)
+ModernismButton = mainbuttons.ModernismButton(scale_factor, RealismButton.rect.right + 25,
+                                              background_rect.top + 25)
+ContemporaryArtButton = mainbuttons.ContemporaryArtButton(scale_factor, ModernismButton.rect.right + 25,
+                                                          background_rect.top + 25)
+OrientalArtButton = mainbuttons.OrientalArtButton(scale_factor, ContemporaryArtButton.rect.right + 25,
+                                                  background_rect.top + 25)
 buttons.append(exitbutton)
-buttons.append(antiquitybutton)
-buttons.append(middleagesbutton)
+buttons.append(Antiquitybutton)
+buttons.append(Middleagesbutton)
 buttons.append(RenaissanceButton)
 buttons.append(RealismButton)
 buttons.append(ModernismButton)
