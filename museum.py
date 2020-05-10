@@ -4,6 +4,7 @@ import image_resize
 import mainbuttons
 import config as c
 
+
 background_path = "covers\\background.jpg"
 background = pygame.image.load(background_path)
 background_rect = background.get_rect()
