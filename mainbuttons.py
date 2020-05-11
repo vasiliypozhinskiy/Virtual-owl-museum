@@ -2,6 +2,7 @@ import pygame
 import room_module
 import image_resize
 import os
+import sys
 
 
 class Button:
@@ -37,7 +38,7 @@ class ExitButton(Button):
         Button.__init__(self, scale_factor, x, y, text="", image_path="covers\\exit.jpg")
 
     def clicked(self):
-        exit()
+        sys.exit()
 
 
 class AntiquityButton(Button):

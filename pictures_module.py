@@ -82,7 +82,7 @@ class Picture:
                 strings.append(words[0])
                 del words[0]
                 index += 1
-        if len(strings) * self.font_size > c.screen_height:
+        if len(strings) * self.font_size > c.screen_height - 10:
             self.font_size -= 1
             self.font = pygame.font.Font('freesansbold.ttf', self.font_size)
             strings = self.split_description_to_strings()
@@ -94,5 +94,5 @@ class Picture:
         surface.blit(self.name_text, self.name_text_rect)
         surface.blit(c.text_alpha, (c.screen_width * 0.75, 0, c.screen_width * 0.25, c.screen_height))
         for number, string in enumerate(self.text):
-            surface.blit(string, (c.screen_width * 0.75, number * self.font_size,
+            surface.blit(string, (c.screen_width * 0.75, 10 + (number * self.font_size),
                                   c.screen_width * 0.25, c.screen_height))

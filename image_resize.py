@@ -9,9 +9,9 @@ def scale_image(input_image_path, output_image_path, width=None, height=None):
 
     if width:
         scale_factor = width / original_width
-        output_image = pygame.transform.scale(input_image, (round(width), round(original_height * scale_factor)))
+        output_image = pygame.transform.smoothscale(input_image, (round(width), round(original_height * scale_factor)))
         pygame.image.save(output_image, output_image_path)
     if height:
         scale_factor = height / original_height
-        output_image = pygame.transform.scale(input_image, (round(original_width * scale_factor), round(height)))
+        output_image = pygame.transform.smoothscale(input_image, (round(original_width * scale_factor), round(height)))
         pygame.image.save(output_image, output_image_path)
