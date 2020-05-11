@@ -1,1 +1,5 @@
 /setup.py
+/.idea/
+/build/
+/venv/
+/__pycache__/
